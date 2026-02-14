@@ -1,31 +1,39 @@
 # Learning Linear Regression
 
 Core question  
-“How does the output change when the input changes?”
+**"How does the output change when the input changes?"**
 
 ---
 
 ## Model
 
-Single feature  
-y = w·x + b
+### Single feature
 
-Multiple features  
-y = w₁x₁ + w₂x₂ + ... + wₙxₙ + b
+y = w·x + b  
 
-w → feature importance (slope)  
-b → bias / baseline value  
+### Multiple features
 
-Prediction  
-ŷ = Xw + b
+y = w₁x₁ + w₂x₂ + ... + wₙxₙ + b  
+
+- w → feature importance (slope)  
+- b → bias / baseline value  
+
+### Prediction
+
+ŷ = Xw + b  
 
 ---
 
-## Loss functions
+## Loss Functions
 
 Loss functions define **what kind of errors the model cares about**.
 
-### MSE (mean squared error)
+### Mean Squared Error (MSE)
+
+\[
+E = \frac{1}{n} \sum_{i=1}^{n} (y_i - (m x_i + b))^2
+\]
+
 - squares the error  
 - large errors dominate the loss  
 - very sensitive to outliers  
@@ -35,7 +43,14 @@ Used when:
 - outliers are rare  
 - large errors are important signal  
 
-### MAE (mean absolute error)
+---
+
+### Mean Absolute Error (MAE)
+
+\[
+E = \frac{1}{n} \sum_{i=1}^{n} |y_i - (m x_i + b)|
+\]
+
 - absolute value of error  
 - all errors treated linearly  
 - robust to outliers  
@@ -45,7 +60,20 @@ Used when:
 - data is noisy  
 - outliers are untrusted  
 
-### Huber loss
+---
+
+### Huber Loss
+
+For error \( e \):
+
+\[
+L_\delta(e) =
+\begin{cases}
+\frac{1}{2} e^2 & \text{if } |e| \le \delta \\
+\delta(|e| - \frac{1}{2}\delta) & \text{otherwise}
+\end{cases}
+\]
+
 - behaves like MSE for small errors  
 - behaves like MAE for large errors  
 - smooth + robust  
@@ -56,28 +84,90 @@ Used when:
 
 ---
 
-## Gradient descent
+## Gradient Descent
 
-Update rule (always the same):
+### Update Rule (always the same)
 
-w = w − α · dw  
-b = b − α · db  
+\[
+w = w - \alpha \cdot dw
+\]
 
-α  → learning rate  
-dw → ∂loss / ∂w  
-db → ∂loss / ∂b  
+\[
+b = b - \alpha \cdot db
+\]
 
-Key idea  
-Loss function defines the gradients, not the update rule.
+Where:
+
+- α  → learning rate  
+- dw → ∂loss / ∂w  
+- db → ∂loss / ∂b  
+
+**Key idea:**  
+The loss function defines the gradients, not the update rule.
 
 ---
 
-## Extrapolation vs interpolation
+## Gradient Derivation for MSE
 
-Interpolation  
+Starting from:
+
+\[
+E = \frac{1}{n} \sum_{i=1}^{n} (y_i - (m x_i + b))^2
+\]
+
+### Partial derivative with respect to m
+
+\[
+\frac{\partial E}{\partial m}
+=
+\frac{1}{n}
+\sum_{i=1}^{n}
+2 (y_i - (m x_i + b)) (-x_i)
+\]
+
+\[
+=
+-\frac{2}{n}
+\sum_{i=1}^{n}
+x_i (y_i - (m x_i + b))
+\]
+
+---
+
+### Partial derivative with respect to b
+
+\[
+\frac{\partial E}{\partial b}
+=
+-\frac{2}{n}
+\sum_{i=1}^{n}
+(y_i - (m x_i + b))
+\]
+
+---
+
+### Final Gradient Update (Single Feature)
+
+\[
+m = m - \alpha \left( -\frac{2}{n}
+\sum_{i=1}^{n}
+x_i (y_i - (m x_i + b)) \right)
+\]
+
+\[
+b = b - \alpha \left( -\frac{2}{n}
+\sum_{i=1}^{n}
+(y_i - (m x_i + b)) \right)
+\]
+
+---
+
+## Extrapolation vs Interpolation
+
+### Interpolation
 Predictions made **inside** the training data range.
 
-Extrapolation  
+### Extrapolation
 Predictions made **outside** the training data range.
 
 Extrapolation assumes the learned trend continues beyond observed data  
@@ -87,33 +177,36 @@ Loss choice affects extrapolation because it changes the learned slope.
 
 ---
 
-## Experiments performed in code
+## Experiments Performed in Code
 
-### 1. Clean data experiment
+### 1. Clean Data Experiment
+
 - data generated from y = 3x + 4 + noise  
 - all loss functions produce similar regression lines  
 - loss values differ but geometry looks similar  
 
-Observation  
+**Observation:**  
 Clean data hides loss-function differences.
 
 ---
 
-### 2. Extreme outliers experiment
-- added high-leverage outliers far from the main data  
-- retrained MSE, MAE, and huber models  
+### 2. Extreme Outliers Experiment
 
-Observations:
+- added high-leverage outliers far from the main data  
+- retrained MSE, MAE, and Huber models  
+
+**Observations:**
+
 - MSE regression line shifts significantly  
 - MAE remains close to the central trend  
-- huber lies between MSE and MAE  
+- Huber lies between MSE and MAE  
 
-Conclusion  
+**Conclusion:**  
 Outliers expose true loss-function behavior.
 
 ---
 
-### 3. Residual analysis
+### 3. Residual Analysis
 
 Residual = ŷ − y
 
@@ -121,36 +214,37 @@ Residual = ŷ − y
 - a few extreme residuals dominate MSE  
 - squared residuals cause MSE loss to grow rapidly  
 
-Key insight  
+**Key insight:**  
 MSE explodes through squared residuals, not visually.
 
 ---
 
-### 4. Loss vs error visualization
+### 4. Loss vs Error Visualization
 
 Loss plotted against prediction error shows:
+
 - MSE grows quadratically  
 - MAE grows linearly  
-- huber transitions from quadratic to linear  
+- Huber transitions from quadratic to linear  
 
 This explains robustness differences mathematically.
 
 ---
 
-## Practical guidelines
+## Practical Guidelines
 
-Few large, untrusted outliers → MAE or huber  
-Few large, trusted outliers   → MSE  
-Unsure about outliers         → huber  
+- Few large, untrusted outliers → MAE or Huber  
+- Few large, trusted outliers → MSE  
+- Unsure about outliers → Huber  
 
 Loss choice depends on whether outliers are signal or noise.
 
 ---
 
-## Key takeaways
+## Key Takeaways
 
 - regression lines can look similar even when losses differ greatly  
 - MSE is sensitive due to squared residuals  
 - MAE is robust but non-smooth  
-- huber balances robustness and stability  
+- Huber balances robustness and stability  
 - differences become clearer during extrapolation  

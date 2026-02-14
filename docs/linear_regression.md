@@ -94,3 +94,110 @@ E = (1/n) Σᵢ₌₁ⁿ (yᵢ − (m·xᵢ + b))²
 m = m − α [ −(2/n) Σᵢ₌₁ⁿ xᵢ (yᵢ − (m·xᵢ + b)) ]  
 
 b = b − α [ −(2/n) Σᵢ₌₁ⁿ (yᵢ − (m·xᵢ + b)) ]
+
+# Matrix Form of Linear Regression (Normal Equation)
+
+---
+
+## Residual Sum of Squares (RSS)
+
+RSS = Σᵢ₌₁ⁿ (yᵢ − ŷᵢ)²  
+
+Since:
+
+ŷᵢ = xᵢᵀ β  
+
+We can write:
+
+RSS(β) = (y − Xβ)ᵀ (y − Xβ)
+
+---
+
+## Expanding RSS
+
+RSS(β)  
+= yᵀy − βᵀXᵀy − yᵀXβ + βᵀXᵀXβ  
+
+Because βᵀXᵀy and yᵀXβ are scalars (equal), we combine:
+
+RSS(β)  
+= yᵀy − 2βᵀXᵀy + βᵀXᵀXβ
+
+---
+
+## Taking Derivative with Respect to β
+
+∂RSS / ∂β  
+= 0 − 2Xᵀy + 2XᵀXβ  
+
+Set derivative equal to zero:
+
+−2Xᵀy + 2XᵀXβ = 0  
+
+---
+
+## Solving for β
+
+2Xᵀy = 2XᵀXβ  
+
+Divide by 2:
+
+Xᵀy = XᵀXβ  
+
+Multiply both sides by (XᵀX)⁻¹:
+
+β̂ = (XᵀX)⁻¹ Xᵀy  
+
+This is the **Normal Equation**.
+
+---
+
+# Prediction in Matrix Form
+
+ŷ = Xβ̂  
+
+---
+
+# Understanding the Design Matrix
+
+To include bias (intercept):
+
+Let x₀ = 1  
+
+Then each training example becomes:
+
+xᵢ = [ 1, x₁, x₂, x₃, ... ]
+
+And parameter vector:
+
+β = [ b, w₁, w₂, w₃, ... ]ᵀ
+
+Where:
+
+- b  → intercept  
+- wⱼ → feature coefficients  
+
+---
+
+# Scalar Version (Single Feature Case)
+
+For single feature:
+
+RSS = Σᵢ₌₁ⁿ (yᵢ − (mxᵢ + b))²  
+
+Which is exactly the form used in the gradient descent implementation.
+
+---
+
+# Key Insight
+
+Gradient Descent:
+- Iterative optimization
+- Works for large datasets
+- Does not require matrix inversion
+
+Normal Equation:
+- Closed-form analytical solution
+- Requires computing (XᵀX)⁻¹
+- Expensive for high-dimensional data
+

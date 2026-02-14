@@ -36,9 +36,8 @@ Used when:
 
 For error e:
 
-Lδ(e) =  
-  ½e²    if |e| ≤ δ  
-  δ(|e| − ½δ) otherwise  
+Lδ(e) =  ½e²            if |e| ≤ δ  
+         δ(|e| − ½δ)    otherwise  
 
 - behaves like MSE for small errors  
 - behaves like MAE for large errors  
@@ -78,17 +77,15 @@ E = (1/n) Σᵢ₌₁ⁿ (yᵢ − (m·xᵢ + b))²
 
 ### Partial derivative with respect to m
 
-∂E/∂m  
-= (1/n) Σᵢ₌₁ⁿ 2(yᵢ − (m·xᵢ + b))(−xᵢ)  
+∂E/∂m   = (1/n) Σᵢ₌₁ⁿ 2(yᵢ − (m·xᵢ + b))(−xᵢ)  
 
-= −(2/n) Σᵢ₌₁ⁿ xᵢ (yᵢ − (m·xᵢ + b))
+        = −(2/n) Σᵢ₌₁ⁿ xᵢ (yᵢ − (m·xᵢ + b))
 
 ---
 
 ### Partial derivative with respect to b
 
-∂E/∂b  
-= −(2/n) Σᵢ₌₁ⁿ (yᵢ − (m·xᵢ + b))
+∂E/∂b  = −(2/n) Σᵢ₌₁ⁿ (yᵢ − (m·xᵢ + b))
 
 ---
 
